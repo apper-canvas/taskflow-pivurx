@@ -875,6 +875,7 @@ const MainFeature = () => {
                     </select>
 
                   </div>
+                  </div>
                     <label htmlFor="edit-projectId" className="text-sm font-medium flex items-center">
                       <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
                       Project
