@@ -922,6 +922,7 @@ const MainFeature = () => {
                     Save Changes
                   </button>
                 </div>
+                </div>
               </form>
             </motion.div>
           </motion.div>
