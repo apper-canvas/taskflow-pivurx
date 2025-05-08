@@ -892,7 +892,7 @@ const MainFeature = () => {
                       ))}
                     </select>
                   </div>
-                  </div>
+                  
                   
                   <div className="flex flex-col space-y-1">
                     <label htmlFor="edit-category" className="text-sm font-medium">
