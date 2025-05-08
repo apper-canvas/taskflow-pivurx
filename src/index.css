@@ -78,6 +78,27 @@
     @apply flex-1 overflow-y-auto p-6 pt-20;
   }
   }
+  /* Calendar Styles */
+  .calendar-grid {
+    @apply text-surface-800 dark:text-surface-200;
+  }
+  
+  .calendar-grid .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  
+  .calendar-grid .no-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+  }
+  
+  /* Toast Styles */
+  :root {
+    --toastify-color-light: theme('colors.white');
+    --toastify-color-dark: theme('colors.surface.800');
+    --toastify-color-info: theme('colors.primary.DEFAULT');
+    --toastify-color-success: theme('colors.secondary.DEFAULT');
+  }
 
 @layer utilities {
   .scrollbar-hide {
