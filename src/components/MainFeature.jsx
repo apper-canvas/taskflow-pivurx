@@ -20,6 +20,7 @@ const MainFeature = () => {
   const MoonIcon = getIcon('Moon');
   const ClockIcon = getIcon('Clock');
   const AlertIcon = getIcon('AlertTriangle');
+  const FolderIcon = getIcon('Folder');
   
   // Define priority colors and icons
   const priorityConfig = {
@@ -27,6 +28,34 @@ const MainFeature = () => {
     medium: { color: 'text-amber-500', bgColor: 'bg-amber-50 dark:bg-amber-900/20', name: 'Medium' },
     low: { color: 'text-blue-500', bgColor: 'bg-blue-50 dark:bg-blue-900/20', name: 'Low' }
   };
+  
+  // Initial projects data from localStorage or default sample projects
+  const [projects, setProjects] = useState(() => {
+    const savedProjects = localStorage.getItem('projects');
+    if (savedProjects) {
+      try {
+        return JSON.parse(savedProjects);
+      } catch (e) {
+        return [];
+      }
+    }
+    
+    // Default sample projects
+    return [
+      {
+        id: '1',
+        name: 'Work',
+        description: 'Professional tasks and assignments',
+        color: 'blue'
+      },
+      {
+        id: '2',
+        name: 'Personal',
+        description: 'Personal errands and goals',
+        color: 'green'
+      }
+    ];
+  });
   
   // Initial task data from localStorage or default sample tasks
   const [tasks, setTasks] = useState(() => {
@@ -49,7 +78,8 @@ const MainFeature = () => {
         createdAt: new Date().toISOString(),
         dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
         priority: 'high',
-        category: 'Work'
+        category: 'Work',
+        projectId: '1'
       },
       {
         id: '2',
@@ -59,7 +89,8 @@ const MainFeature = () => {
         createdAt: new Date().toISOString(),
         dueDate: new Date().toISOString(),
         priority: 'medium',
-        category: 'Personal'
+        category: 'Personal',
+        projectId: '2'
       },
       {
         id: '3',
@@ -69,7 +100,8 @@ const MainFeature = () => {
         createdAt: new Date().toISOString(),
         dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
         priority: 'low',
-        category: 'Learning'
+        category: 'Learning',
+        projectId: null
       }
     ];
   });
@@ -79,12 +111,18 @@ const MainFeature = () => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
   
+  // Save projects to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('projects', JSON.stringify(projects));
+  }, [projects]);
+  
   // Task form state
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
     dueDate: format(new Date(), 'yyyy-MM-dd'),
     priority: 'medium',
+    projectId: '',
     category: ''
   });
   
@@ -96,12 +134,14 @@ const MainFeature = () => {
   const [filter, setFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sort, setSort] = useState('createdAt');
+  const [projectFilter, setProjectFilter] = useState('all');
   const [sortDirection, setSortDirection] = useState('desc');
   const [showFilters, setShowFilters] = useState(false);
   
   // All available categories from tasks
   const allCategories = ['all', ...new Set(tasks.map(task => task.category).filter(Boolean))];
   
+  const projectOptions = [{ id: '', name: 'No Project' }, ...projects];
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -126,6 +166,10 @@ const MainFeature = () => {
       .filter(task => {
         if (categoryFilter === 'all') return true;
         return task.category === categoryFilter;
+      })
+      .filter(task => {
+        if (projectFilter === 'all') return true;
+        return task.projectId === projectFilter;
       })
       .sort((a, b) => {
         let aValue = a[sort];
@@ -162,7 +206,8 @@ const MainFeature = () => {
       createdAt: new Date().toISOString(),
       dueDate: new Date(newTask.dueDate).toISOString(),
       priority: newTask.priority,
-      category: newTask.category.trim() || 'Uncategorized'
+      category: newTask.category.trim() || 'Uncategorized',
+      projectId: newTask.projectId || null
     };
     
     setTasks(prev => [task, ...prev]);
@@ -171,6 +216,7 @@ const MainFeature = () => {
       description: '',
       dueDate: format(new Date(), 'yyyy-MM-dd'),
       priority: 'medium',
+      projectId: '',
       category: ''
     });
     
@@ -223,7 +269,8 @@ const MainFeature = () => {
               title: editingTask.title.trim(),
               description: editingTask.description.trim(),
               dueDate: new Date(editingTask.dueDate).toISOString(),
-              category: editingTask.category.trim() || 'Uncategorized'
+              category: editingTask.category.trim() || 'Uncategorized',
+              projectId: editingTask.projectId
             } 
           : task
       )
@@ -265,6 +312,13 @@ const MainFeature = () => {
     today.setHours(0, 0, 0, 0);
     
     return dueDate < today && !dateString.completed;
+  };
+
+  // Get project by ID
+  const getProjectById = (id) => {
+    if (!id) return null;
+    const project = projects.find(project => project.id === id);
+    return project;
   };
   
   // Stats calculation
@@ -391,7 +445,7 @@ const MainFeature = () => {
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="flex flex-col space-y-1">
               <label htmlFor="dueDate" className="text-sm font-medium flex items-center">
                 <CalendarIcon className="w-4 h-4 mr-1 text-surface-500" />
@@ -424,8 +478,29 @@ const MainFeature = () => {
                 <option value="high">High</option>
               </select>
             </div>
-            
             <div className="flex flex-col space-y-1">
+              <label htmlFor="projectId" className="text-sm font-medium flex items-center">
+                <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
+                Project
+              </label>
+              <select
+                id="projectId"
+                name="projectId"
+                value={newTask.projectId}
+                onChange={handleInputChange}
+                className="input-field"
+              >
+                <option value="">No Project</option>
+                {projects.map(project => (
+                  <option key={project.id} value={project.id}>
+                    {project.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            
+              <label htmlFor="category" className="text-sm font-medium flex items-center">
               <label htmlFor="category" className="text-sm font-medium">
                 Category
               </label>
@@ -505,7 +580,7 @@ const MainFeature = () => {
               transition={{ duration: 0.3 }}
               className="overflow-hidden"
             >
-              <div className="pt-4 mt-4 border-t border-surface-200 dark:border-surface-700 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="pt-4 mt-4 border-t border-surface-200 dark:border-surface-700 grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="flex flex-col space-y-1">
                   <label className="text-sm font-medium">Category Filter</label>
                   <select
@@ -519,6 +594,23 @@ const MainFeature = () => {
                       </option>
                     ))}
                   </select>
+
+                <div className="flex flex-col space-y-1">
+                  <label className="text-sm font-medium">Project Filter</label>
+                  <select
+                    value={projectFilter}
+                    onChange={(e) => setProjectFilter(e.target.value)}
+                    className="input-field"
+                  >
+                    <option value="all">All Projects</option>
+                    <option value="">No Project</option>
+                    {projects.map((project) => (
+                      <option key={project.id} value={project.id}>
+                        {project.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 </div>
                 
                 <div className="flex flex-col space-y-1">
@@ -561,6 +653,7 @@ const MainFeature = () => {
         <h3 className="text-lg font-semibold">
           {filter === 'all' ? 'All Tasks' : filter === 'completed' ? 'Completed Tasks' : 'Active Tasks'}
           {categoryFilter !== 'all' && ` • ${categoryFilter}`}
+          {projectFilter !== 'all' && ` • ${projectFilter === '' ? 'No Project' : getProjectById(projectFilter)?.name}`}
         </h3>
         
         {getFilteredTasks().length === 0 ? (
@@ -621,8 +714,14 @@ const MainFeature = () => {
                           {priorityConfig[task.priority].name}
                         </span>
                         
-                        <span className={`text-xs px-2 py-1 rounded-full bg-surface-100 dark:bg-surface-700 text-surface-700 dark:text-surface-300`}>
-                          {task.category}
+                        <span className="text-xs px-2 py-1 rounded-full bg-surface-100 dark:bg-surface-700 text-surface-700 dark:text-surface-300">
+                          {task.category || 'Uncategorized'}
+                        </span>
+
+                        {task.projectId && (
+                        <span className="text-xs px-2 py-1 rounded-full flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300">
+                          <FolderIcon className="w-3 h-3" /> {getProjectById(task.projectId)?.name}
+                        </span>
                         </span>
                       </div>
                     </div>
@@ -742,7 +841,7 @@ const MainFeature = () => {
                   />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div className="flex flex-col space-y-1">
                     <label htmlFor="edit-dueDate" className="text-sm font-medium flex items-center">
                       <CalendarIcon className="w-4 h-4 mr-1 text-surface-500" />
@@ -774,6 +873,25 @@ const MainFeature = () => {
                       <option value="medium">Medium</option>
                       <option value="high">High</option>
                     </select>
+
+                  <div className="flex flex-col space-y-1">
+                    <label htmlFor="edit-projectId" className="text-sm font-medium flex items-center">
+                      <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
+                      Project
+                    </label>
+                    <select
+                      id="edit-projectId"
+                      name="projectId"
+                      value={editingTask.projectId || ''}
+                      onChange={handleEditChange}
+                      className="input-field"
+                    >
+                      <option value="">No Project</option>
+                      {projects.map(project => (
+                        <option key={project.id} value={project.id}>{project.name}</option>
+                      ))}
+                    </select>
+                  </div>
                   </div>
                   
                   <div className="flex flex-col space-y-1">

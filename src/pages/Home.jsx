@@ -14,6 +14,7 @@ const Home = () => {
   const MenuIcon = getIcon('Menu');
   const XIcon = getIcon('X');
   const Logo = getIcon('ListTodo');
+  const FolderIcon = getIcon('Folder');
   
   const [isNavOpen, setIsNavOpen] = useState(false);
   
@@ -59,6 +60,13 @@ const Home = () => {
               >
                 My Tasks
               </a>
+              <a 
+                href="/projects" 
+                onClick={() => navigate('/projects')}
+                className="px-3 py-2 rounded-lg text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-white transition-colors"
+              >
+                Projects
+              </a>
             </nav>
             
             {/* Mobile nav toggle */}
@@ -100,6 +108,13 @@ const Home = () => {
               className="px-4 py-3 rounded-xl text-center font-medium bg-surface-100 text-surface-900 dark:bg-surface-800 dark:text-white"
             >
               My Tasks
+            <a 
+              onClick={() => {
+                setIsNavOpen(false);
+                navigate('/projects');
+              }}
+              className="px-4 py-3 rounded-xl text-center text-surface-600 hover:text-surface-900 hover:bg-surface-100 dark:text-surface-300 dark:hover:text-white dark:hover:bg-surface-800 transition-colors"
+            >Projects</a>
             </a>
           </nav>
         </motion.div>
