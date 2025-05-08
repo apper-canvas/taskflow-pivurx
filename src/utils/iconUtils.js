@@ -1,33 +1,23 @@
-import {
-  CheckCircle,
+import { 
+  Home, 
+  Folder, 
+  Calendar, 
+  BarChart, 
+  Users, 
+  Settings, 
+  Menu, 
+  ChevronLeft, 
+  CheckSquare, 
+  Briefcase, 
+  CalendarClock, 
   Clock,
-  AlertCircle,
-  Calendar,
-  BarChart2,
+  Bug,
+  Star,
   FileText,
-  Home,
-  Settings,
-  Users,
-  Briefcase,
-  Layout,
-  PieChart
+  Circle
 } from 'lucide-react';
 
-const iconMap = {
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  Calendar,
-  BarChart2,
-  FileText,
-  Home,
-  Settings,
-  Users,
-  Briefcase,
-  Layout,
-  PieChart
-};
-
-const getIcon = (name) => iconMap[name] || null;
-
-export default getIcon;
+export default function getIcon(iconName) {
+  const icons = { Home, Folder, Calendar, BarChart, Users, Settings, Menu, ChevronLeft, CheckSquare, Briefcase, CalendarClock, Clock, Bug, Star, FileText, Circle };
+  return icons[iconName] || Circle; // Return the requested icon or a default Circle icon
+}
