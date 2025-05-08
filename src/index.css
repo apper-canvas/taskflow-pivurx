@@ -78,7 +78,6 @@
     @apply flex-1 overflow-y-auto p-6 pt-20;
   }
   }
-}
 
 @layer utilities {
   .scrollbar-hide {
