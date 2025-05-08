@@ -876,7 +876,8 @@ const MainFeature = () => {
 
                   </div>
                   </div>
-                    <label htmlFor="edit-projectId" className="text-sm font-medium flex items-center">
+                  
+                  <div className="flex flex-col space-y-1">
                       <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
                       Project
                     </label>
@@ -894,8 +895,7 @@ const MainFeature = () => {
                     </select>
                   </div>
                   
-                  
-                  <div className="flex flex-col space-y-1">
+                  </div>
                     <label htmlFor="edit-category" className="text-sm font-medium">
                       Category
                     </label>
@@ -908,7 +908,7 @@ const MainFeature = () => {
                       onChange={handleEditChange}
                       className="input-field"
                     />
-                  </div>
+                
                 </div>
                 
                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 sm:justify-end pt-2">
