@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import Projects from './pages/Projects';
 import Calendar from './pages/Calendar';
+import Analytics from './pages/Analytics';
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>
