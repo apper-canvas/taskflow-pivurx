@@ -7,7 +7,6 @@ import getIcon from './utils/iconUtils';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 
-import Projects from './pages/Projects';
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
     if (localStorage.getItem('darkMode') === 'true') {
@@ -58,7 +57,6 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/projects/*" element={<Projects />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

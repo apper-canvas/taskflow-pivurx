@@ -20,7 +20,6 @@ const MainFeature = () => {
   const MoonIcon = getIcon('Moon');
   const ClockIcon = getIcon('Clock');
   const AlertIcon = getIcon('AlertTriangle');
-  const FolderIcon = getIcon('Folder');
   
   // Define priority colors and icons
   const priorityConfig = {
@@ -74,28 +73,6 @@ const MainFeature = () => {
       }
     ];
   });
-
-  // Projects state
-  const [projects, setProjects] = useState(() => {
-    const savedProjects = localStorage.getItem('projects');
-    if (savedProjects) {
-      try {
-        return JSON.parse(savedProjects);
-      } catch (e) {
-        return [];
-      }
-    }
-    return [
-      {
-        id: '1',
-        name: 'Work Tasks',
-        description: 'Professional tasks and work-related activities',
-        color: '#4f46e5', // primary color
-        createdAt: new Date().toISOString(),
-        tasks: []
-      }
-    ];
-  });
   
   // Save tasks to localStorage whenever they change
   useEffect(() => {
@@ -108,16 +85,13 @@ const MainFeature = () => {
     description: '',
     dueDate: format(new Date(), 'yyyy-MM-dd'),
     priority: 'medium',
-    category: '',
-    projectId: ''
+    category: ''
   });
   
   // Editing state
   const [editingTask, setEditingTask] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   
-  // Project filter state
-  const [projectFilter, setProjectFilter] = useState('all');
   // Filter and sort state
   const [filter, setFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -152,10 +126,6 @@ const MainFeature = () => {
       .filter(task => {
         if (categoryFilter === 'all') return true;
         return task.category === categoryFilter;
-      })
-      .filter(task => {
-        if (projectFilter === 'all') return true;
-        return task.projectId === projectFilter;
       })
       .sort((a, b) => {
         let aValue = a[sort];
@@ -192,8 +162,7 @@ const MainFeature = () => {
       createdAt: new Date().toISOString(),
       dueDate: new Date(newTask.dueDate).toISOString(),
       priority: newTask.priority,
-      category: newTask.category.trim() || 'Uncategorized',
-      projectId: newTask.projectId || null
+      category: newTask.category.trim() || 'Uncategorized'
     };
     
     setTasks(prev => [task, ...prev]);
@@ -202,8 +171,7 @@ const MainFeature = () => {
       description: '',
       dueDate: format(new Date(), 'yyyy-MM-dd'),
       priority: 'medium',
-      category: '',
-      projectId: ''
+      category: ''
     });
     
     toast.success("Task added successfully!");
@@ -423,7 +391,7 @@ const MainFeature = () => {
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col space-y-1">
               <label htmlFor="dueDate" className="text-sm font-medium flex items-center">
                 <CalendarIcon className="w-4 h-4 mr-1 text-surface-500" />
@@ -470,27 +438,6 @@ const MainFeature = () => {
                 onChange={handleInputChange}
                 className="input-field"
               />
-
-            <div className="flex flex-col space-y-1">
-              <label htmlFor="projectId" className="text-sm font-medium flex items-center">
-                <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
-                Project
-              </label>
-              <select
-                id="projectId"
-                name="projectId"
-                value={newTask.projectId}
-                onChange={handleInputChange}
-                className="input-field"
-              >
-                <option value="">No Project</option>
-                {projects.map(project => (
-                  <option key={project.id} value={project.id}>
-                    {project.name}
-                  </option>
-                ))}
-              </select>
-            </div>
             </div>
           </div>
           
@@ -517,17 +464,6 @@ const MainFeature = () => {
                 : 'btn-outline'}`}
             >
               All
-                  ? 'bg-primary text-white' 
-                  : 'btn-outline'}`}
-              >
-                All Tasks
-              </button>
-              <button
-                onClick={() => setFilter('active')}
-                className={`btn px-3 py-1.5 ${filter === 'active' 
-                  ? 'bg-blue-500 text-white' 
-                  : 'btn-outline'}`}
-              >
             </button>
             <button
               onClick={() => setFilter('active')}
@@ -570,7 +506,7 @@ const MainFeature = () => {
               className="overflow-hidden"
             >
               <div className="pt-4 mt-4 border-t border-surface-200 dark:border-surface-700 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="pt-4 mt-4 border-t border-surface-200 dark:border-surface-700 grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="flex flex-col space-y-1">
                   <label className="text-sm font-medium">Category Filter</label>
                   <select
                     value={categoryFilter}
@@ -584,21 +520,6 @@ const MainFeature = () => {
                     ))}
                   </select>
                 </div>
-                <div className="flex flex-col space-y-1">
-                  <label className="text-sm font-medium">Project Filter</label>
-                  <select
-                    value={projectFilter}
-                    onChange={(e) => setProjectFilter(e.target.value)}
-                    className="input-field"
-                  >
-                    <option value="all">All Projects</option>
-                    <option value="">No Project</option>
-                    {projects.map(project => (
-                      <option key={project.id} value={project.id}>{project.name}</option>
-                    ))}
-                  </select>
-                </div>
-                
                 
                 <div className="flex flex-col space-y-1">
                   <label className="text-sm font-medium">Sort By</label>
@@ -640,7 +561,6 @@ const MainFeature = () => {
         <h3 className="text-lg font-semibold">
           {filter === 'all' ? 'All Tasks' : filter === 'completed' ? 'Completed Tasks' : 'Active Tasks'}
           {categoryFilter !== 'all' && ` • ${categoryFilter}`}
-          {projectFilter !== 'all' && ` • ${projectFilter === '' ? 'No Project' : projects.find(p => p.id === projectFilter)?.name}`}
         </h3>
         
         {getFilteredTasks().length === 0 ? (
@@ -704,16 +624,6 @@ const MainFeature = () => {
                         <span className={`text-xs px-2 py-1 rounded-full bg-surface-100 dark:bg-surface-700 text-surface-700 dark:text-surface-300`}>
                           {task.category}
                         </span>
-
-                        {task.projectId && (
-                          <span 
-                            className="text-xs px-2 py-1 rounded-full flex items-center space-x-1"
-                            style={{ backgroundColor: projects.find(p => p.id === task.projectId)?.color + '20' }}
-                          >
-                            <FolderIcon className="w-3 h-3" style={{ color: projects.find(p => p.id === task.projectId)?.color }} />
-                            <span style={{ color: projects.find(p => p.id === task.projectId)?.color }}>{projects.find(p => p.id === task.projectId)?.name}</span>
-                          </span>
-                        )}
                       </div>
                     </div>
                     
@@ -832,7 +742,7 @@ const MainFeature = () => {
                   />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex flex-col space-y-1">
                     <label htmlFor="edit-dueDate" className="text-sm font-medium flex items-center">
                       <CalendarIcon className="w-4 h-4 mr-1 text-surface-500" />
@@ -879,27 +789,6 @@ const MainFeature = () => {
                       onChange={handleEditChange}
                       className="input-field"
                     />
-
-                  <div className="flex flex-col space-y-1">
-                    <label htmlFor="edit-projectId" className="text-sm font-medium flex items-center">
-                      <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
-                      Project
-                    </label>
-                    <select
-                      id="edit-projectId"
-                      name="projectId"
-                      value={editingTask.projectId || ''}
-                      onChange={handleEditChange}
-                      className="input-field"
-                    >
-                      <option value="">No Project</option>
-                      {projects.map(project => (
-                        <option key={project.id} value={project.id}>
-                          {project.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                   </div>
                 </div>
                 

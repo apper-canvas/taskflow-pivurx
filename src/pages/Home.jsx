@@ -56,13 +56,6 @@ const Home = () => {
               <a 
                 href="#main" 
                 className="px-3 py-2 rounded-lg font-medium bg-surface-100 text-surface-900 dark:bg-surface-800 dark:text-white"
-              <Link 
-                to="/projects" 
-                className="px-3 py-2 rounded-lg text-surface-600 hover:text-surface-900 dark:text-surface-300 dark:hover:text-white transition-colors"
-              >
-                Projects
-              </Link>
-
               >
                 My Tasks
               </a>
@@ -99,15 +92,6 @@ const Home = () => {
             >
               Features
             </a>
-            <Link 
-              to="/projects"
-              onClick={() => setIsNavOpen(false)}
-              className="px-4 py-3 rounded-xl text-center text-surface-600 hover:text-surface-900 hover:bg-surface-100 dark:text-surface-300 dark:hover:text-white dark:hover:bg-surface-800 transition-colors"
-            >
-              Projects
-            </Link>
-              
-
             <a 
               onClick={() => {
                 setIsNavOpen(false);
