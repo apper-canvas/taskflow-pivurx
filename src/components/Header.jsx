@@ -13,7 +13,12 @@ function Header({ toggleSidebar, sidebarOpen, darkMode, setDarkMode }) {
   };
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-10 bg-white/80 dark:bg-surface-800/80 backdrop-blur-sm h-16 border-b border-surface-200 dark:border-surface-700 pl-6 pr-6" style={{ left: sidebarOpen ? '280px' : '80px' }}>
+    <header 
+      className="fixed top-0 right-0 z-10 bg-white/80 dark:bg-surface-800/80 backdrop-blur-sm h-16 border-b border-surface-200 dark:border-surface-700 px-6 transition-all duration-300"
+      style={{ 
+        left: sidebarOpen ? '280px' : '80px'
+      }}
+    >
       <div className="flex items-center justify-between h-full">
         <div className="flex items-center md:hidden">
           <button 
@@ -25,7 +30,7 @@ function Header({ toggleSidebar, sidebarOpen, darkMode, setDarkMode }) {
           </button>
         </div>
         
-        <div className="flex items-center relative w-full max-w-md">
+        <div className="flex items-center relative w-full max-w-md mx-auto">
           <SearchIcon className="w-5 h-5 absolute left-3 text-surface-500" />
           <input
             type="text"

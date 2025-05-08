@@ -9,22 +9,33 @@ function Layout({ children, darkMode, setDarkMode }) {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
-    <div className="app-container bg-surface-50 dark:bg-surface-900">
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+    <div className="flex h-screen overflow-hidden bg-surface-50 dark:bg-surface-900">
+      {/* Sidebar - fixed position */}
+      <div 
+        className="fixed top-0 left-0 h-full z-20 transition-all duration-300"
+        style={{ width: sidebarOpen ? '280px' : '80px' }}
+      >
+        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      </div>
       
-      <div className="relative flex flex-col flex-1 overflow-hidden">
+      {/* Main content - adjusted margin */}
+      <div 
+        className="flex flex-col flex-1 overflow-hidden transition-all duration-300"
+        style={{ marginLeft: sidebarOpen ? '280px' : '80px' }}
+      >
         <Header 
           toggleSidebar={toggleSidebar} 
           sidebarOpen={sidebarOpen}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
         />
-        
-        <main className="main-content">
+
+        <main className="flex-1 overflow-y-auto p-6 pt-20">
           {children}
         </main>
       </div>
       
+      {/* Toast container */}
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
