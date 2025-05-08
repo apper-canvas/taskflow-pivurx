@@ -874,7 +874,7 @@ const MainFeature = () => {
                       <option value="high">High</option>
                     </select>
 
-                  <div className="flex flex-col space-y-1">
+                  </div>
                     <label htmlFor="edit-projectId" className="text-sm font-medium flex items-center">
                       <FolderIcon className="w-4 h-4 mr-1 text-surface-500" />
                       Project
