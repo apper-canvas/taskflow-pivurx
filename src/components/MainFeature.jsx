@@ -720,10 +720,10 @@ const MainFeature = () => {
 
                         {task.projectId && (
                         <span className="text-xs px-2 py-1 rounded-full flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300">
-                          <span className="text-xs px-2 py-1 rounded-full flex items-center gap-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300">
                             <FolderIcon className="w-3 h-3" /> {getProjectById(task.projectId)?.name}
                           </span>
-                        )}
+                    </div>
+                      </div>
                     </div>
                     
                     {task.description && (
