@@ -78,8 +78,8 @@
     @apply flex-1 overflow-y-auto p-6 pt-20;
   }
   }
-}
-  .calendar-grid {
+
+.calendar-grid {
     @apply text-surface-800 dark:text-surface-200;
   }
   
